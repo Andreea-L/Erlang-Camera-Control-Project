@@ -1,0 +1,18 @@
+\contentsline {chapter}{\numberline {1}Introduction}{1}
+\contentsline {section}{\numberline {1.1}Aims}{1}
+\contentsline {section}{\numberline {1.2}Background}{1}
+\contentsline {section}{\numberline {1.3}Motivation}{1}
+\contentsline {section}{\numberline {1.4}Report Content}{1}
+\contentsline {chapter}{\numberline {2}Literature Review}{2}
+\contentsline {section}{\numberline {2.1}Robotics}{2}
+\contentsline {subsection}{\numberline {2.1.1}History of Robotics}{2}
+\contentsline {section}{\numberline {2.2}Robot Operating System}{2}
+\contentsline {section}{\numberline {2.3}Erlang}{3}
+\contentsline {subsection}{\numberline {2.3.1}Models of Concurrency}{3}
+\contentsline {subsection}{\numberline {2.3.2}Concurrency in Erlang}{4}
+\contentsline {section}{\numberline {2.4}Camera Control}{4}
+\contentsline {chapter}{\numberline {3}Requirements}{5}
+\contentsline {section}{\numberline {3.1}Problem Analysis}{5}
+\contentsline {chapter}{\numberline {4}Design and Implementation}{6}
+\contentsline {chapter}{\numberline {5}Analysis}{7}
+\contentsline {chapter}{\numberline {6}Conclusion}{8}
