@@ -154,6 +154,20 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
+rosorbitcamera/CMakeFiles/_rosorbitcamera_generate_messages_check_deps_Int32Numpy.dir/rule:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera/CMakeFiles/_rosorbitcamera_generate_messages_check_deps_Int32Numpy.dir/rule
+.PHONY : rosorbitcamera/CMakeFiles/_rosorbitcamera_generate_messages_check_deps_Int32Numpy.dir/rule
+
+# Convenience name for target.
+_rosorbitcamera_generate_messages_check_deps_Int32Numpy: rosorbitcamera/CMakeFiles/_rosorbitcamera_generate_messages_check_deps_Int32Numpy.dir/rule
+.PHONY : _rosorbitcamera_generate_messages_check_deps_Int32Numpy
+
+# fast build rule for target.
+_rosorbitcamera_generate_messages_check_deps_Int32Numpy/fast:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f rosorbitcamera/CMakeFiles/_rosorbitcamera_generate_messages_check_deps_Int32Numpy.dir/build.make rosorbitcamera/CMakeFiles/_rosorbitcamera_generate_messages_check_deps_Int32Numpy.dir/build
+.PHONY : _rosorbitcamera_generate_messages_check_deps_Int32Numpy/fast
+
+# Convenience name for target.
 rosorbitcamera/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule:
 	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule
 .PHONY : rosorbitcamera/CMakeFiles/geometry_msgs_generate_messages_cpp.dir/rule
@@ -322,6 +336,132 @@ rosgraph_msgs_generate_messages_py/fast:
 .PHONY : rosgraph_msgs_generate_messages_py/fast
 
 # Convenience name for target.
+rosorbitcamera/CMakeFiles/rosorbitcamera_gencpp.dir/rule:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera/CMakeFiles/rosorbitcamera_gencpp.dir/rule
+.PHONY : rosorbitcamera/CMakeFiles/rosorbitcamera_gencpp.dir/rule
+
+# Convenience name for target.
+rosorbitcamera_gencpp: rosorbitcamera/CMakeFiles/rosorbitcamera_gencpp.dir/rule
+.PHONY : rosorbitcamera_gencpp
+
+# fast build rule for target.
+rosorbitcamera_gencpp/fast:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f rosorbitcamera/CMakeFiles/rosorbitcamera_gencpp.dir/build.make rosorbitcamera/CMakeFiles/rosorbitcamera_gencpp.dir/build
+.PHONY : rosorbitcamera_gencpp/fast
+
+# Convenience name for target.
+rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages.dir/rule:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages.dir/rule
+.PHONY : rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages.dir/rule
+
+# Convenience name for target.
+rosorbitcamera_generate_messages: rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages.dir/rule
+.PHONY : rosorbitcamera_generate_messages
+
+# fast build rule for target.
+rosorbitcamera_generate_messages/fast:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages.dir/build.make rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages.dir/build
+.PHONY : rosorbitcamera_generate_messages/fast
+
+# Convenience name for target.
+rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_cpp.dir/rule:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_cpp.dir/rule
+.PHONY : rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_cpp.dir/rule
+
+# Convenience name for target.
+rosorbitcamera_generate_messages_cpp: rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_cpp.dir/rule
+.PHONY : rosorbitcamera_generate_messages_cpp
+
+# fast build rule for target.
+rosorbitcamera_generate_messages_cpp/fast:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_cpp.dir/build.make rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_cpp.dir/build
+.PHONY : rosorbitcamera_generate_messages_cpp/fast
+
+# Convenience name for target.
+rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_eus.dir/rule:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_eus.dir/rule
+.PHONY : rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_eus.dir/rule
+
+# Convenience name for target.
+rosorbitcamera_generate_messages_eus: rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_eus.dir/rule
+.PHONY : rosorbitcamera_generate_messages_eus
+
+# fast build rule for target.
+rosorbitcamera_generate_messages_eus/fast:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_eus.dir/build.make rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_eus.dir/build
+.PHONY : rosorbitcamera_generate_messages_eus/fast
+
+# Convenience name for target.
+rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_lisp.dir/rule:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_lisp.dir/rule
+.PHONY : rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_lisp.dir/rule
+
+# Convenience name for target.
+rosorbitcamera_generate_messages_lisp: rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_lisp.dir/rule
+.PHONY : rosorbitcamera_generate_messages_lisp
+
+# fast build rule for target.
+rosorbitcamera_generate_messages_lisp/fast:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_lisp.dir/build.make rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_lisp.dir/build
+.PHONY : rosorbitcamera_generate_messages_lisp/fast
+
+# Convenience name for target.
+rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_py.dir/rule:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_py.dir/rule
+.PHONY : rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_py.dir/rule
+
+# Convenience name for target.
+rosorbitcamera_generate_messages_py: rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_py.dir/rule
+.PHONY : rosorbitcamera_generate_messages_py
+
+# fast build rule for target.
+rosorbitcamera_generate_messages_py/fast:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_py.dir/build.make rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_py.dir/build
+.PHONY : rosorbitcamera_generate_messages_py/fast
+
+# Convenience name for target.
+rosorbitcamera/CMakeFiles/rosorbitcamera_geneus.dir/rule:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera/CMakeFiles/rosorbitcamera_geneus.dir/rule
+.PHONY : rosorbitcamera/CMakeFiles/rosorbitcamera_geneus.dir/rule
+
+# Convenience name for target.
+rosorbitcamera_geneus: rosorbitcamera/CMakeFiles/rosorbitcamera_geneus.dir/rule
+.PHONY : rosorbitcamera_geneus
+
+# fast build rule for target.
+rosorbitcamera_geneus/fast:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f rosorbitcamera/CMakeFiles/rosorbitcamera_geneus.dir/build.make rosorbitcamera/CMakeFiles/rosorbitcamera_geneus.dir/build
+.PHONY : rosorbitcamera_geneus/fast
+
+# Convenience name for target.
+rosorbitcamera/CMakeFiles/rosorbitcamera_genlisp.dir/rule:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera/CMakeFiles/rosorbitcamera_genlisp.dir/rule
+.PHONY : rosorbitcamera/CMakeFiles/rosorbitcamera_genlisp.dir/rule
+
+# Convenience name for target.
+rosorbitcamera_genlisp: rosorbitcamera/CMakeFiles/rosorbitcamera_genlisp.dir/rule
+.PHONY : rosorbitcamera_genlisp
+
+# fast build rule for target.
+rosorbitcamera_genlisp/fast:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f rosorbitcamera/CMakeFiles/rosorbitcamera_genlisp.dir/build.make rosorbitcamera/CMakeFiles/rosorbitcamera_genlisp.dir/build
+.PHONY : rosorbitcamera_genlisp/fast
+
+# Convenience name for target.
+rosorbitcamera/CMakeFiles/rosorbitcamera_genpy.dir/rule:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera/CMakeFiles/rosorbitcamera_genpy.dir/rule
+.PHONY : rosorbitcamera/CMakeFiles/rosorbitcamera_genpy.dir/rule
+
+# Convenience name for target.
+rosorbitcamera_genpy: rosorbitcamera/CMakeFiles/rosorbitcamera_genpy.dir/rule
+.PHONY : rosorbitcamera_genpy
+
+# fast build rule for target.
+rosorbitcamera_genpy/fast:
+	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f rosorbitcamera/CMakeFiles/rosorbitcamera_genpy.dir/build.make rosorbitcamera/CMakeFiles/rosorbitcamera_genpy.dir/build
+.PHONY : rosorbitcamera_genpy/fast
+
+# Convenience name for target.
 rosorbitcamera/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule:
 	cd /home/andreea/Documents/catkin_ws/build && $(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
 .PHONY : rosorbitcamera/CMakeFiles/sensor_msgs_generate_messages_cpp.dir/rule
@@ -439,6 +579,7 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... _rosorbitcamera_generate_messages_check_deps_Int32Numpy"
 	@echo "... edit_cache"
 	@echo "... geometry_msgs_generate_messages_cpp"
 	@echo "... geometry_msgs_generate_messages_eus"
@@ -457,6 +598,15 @@ help:
 	@echo "... rosgraph_msgs_generate_messages_eus"
 	@echo "... rosgraph_msgs_generate_messages_lisp"
 	@echo "... rosgraph_msgs_generate_messages_py"
+	@echo "... rosorbitcamera_gencpp"
+	@echo "... rosorbitcamera_generate_messages"
+	@echo "... rosorbitcamera_generate_messages_cpp"
+	@echo "... rosorbitcamera_generate_messages_eus"
+	@echo "... rosorbitcamera_generate_messages_lisp"
+	@echo "... rosorbitcamera_generate_messages_py"
+	@echo "... rosorbitcamera_geneus"
+	@echo "... rosorbitcamera_genlisp"
+	@echo "... rosorbitcamera_genpy"
 	@echo "... sensor_msgs_generate_messages_cpp"
 	@echo "... sensor_msgs_generate_messages_eus"
 	@echo "... sensor_msgs_generate_messages_lisp"

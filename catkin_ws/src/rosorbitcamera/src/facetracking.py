@@ -11,74 +11,92 @@
 
 
 import cv2 as cv
-cv.namedWindow('Camera', cv.WINDOW_AUTOSIZE)
+cv.namedWindow('Result', cv.WINDOW_AUTOSIZE)
+frame = None
 
-#import cv_bridge as cvROS
+import cv_bridge as cvROS
+bridge = cvROS.CvBridge()
+
+
 import subprocess
+import sys
 import rospy
 import roslib
 from time import sleep
 from math import sqrt
+from collections import deque
+from sensor_msgs.msg import Image
+from rosorbitcamera.msg import Int32Numpy
 
 UVCDYNCTRLEXEC="/usr/bin/uvcdynctrl"
 
 # Set cascade classifier to use and camera ID (determined with "sudo uvcdynctrl -l")
-faceCascade = cv.CascadeClassifier("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/haarcascade_frontalface_default.xml")
-deviceID = 1
+deviceID = 4
 
-def webcam_feed():
+historical_faces = deque(maxlen=5)
+
+def webcam_feed(pub):
+	global frame
+
 	print "Opening camera..."
 	cap = cv.VideoCapture(deviceID)
-	prevBestFace = (None, None)
-	
-	while(True):
+	rate = rospy.Rate(3)
+
+	while not rospy.is_shutdown():
 		# Capture frame-by-frame
 		ret, frame = cap.read()
 
-		# Draw reference rectangle in the centre of the image
-		cv.rectangle(frame, (270, 190), (370, 290), (0, 0, 255), 2)
+		msg = bridge.cv2_to_imgmsg(frame)
 
-		# Run detection
-		faces = faceCascade.detectMultiScale(frame, scaleFactor=1.1, minNeighbors=6, minSize=(50, 50), maxSize=(250, 250), flags=cv.cv.CV_HAAR_SCALE_IMAGE)
-		
-		if faces != () and faces.size > 0:		# OpenCv strangely returns empty tuples occasionally, so check for that
-			bestFace = max(faces, key=lambda item:item[2])
-			cv.rectangle(frame, (bestFace[0], bestFace[1]), (bestFace[0]+bestFace[2], bestFace[1]+bestFace[3]), (0, 255, 0), 2)
+		pub.publish(msg)
+		rate.sleep()
 
-			bestFaceCentreX = bestFace[0]+bestFace[2]/2
-			bestFaceCentreY = bestFace[1]+bestFace[2]/2
+		workers = pub.get_num_connections()
+		subscribers = []
+		for i in xrange(workers):
+			subscribers += [rospy.Subscriber('orbit_faces'+str(i), Int32Numpy, display_face, callback_args=[i, pub, cap])]
+	
 
-			# If the best face is too far away from one previously detected, it is probably a mis-detection, so ignore
-			if prevBestFace != (None, None) and sqrt((bestFaceCentreX-prevBestFace[0])**2 + (bestFaceCentreY-prevBestFace[1])**2) > 250:
-				continue
+def display_face(faceCoord, args):
+	global frame, historical_faces
+	faceCoord = faceCoord.data
+	workerID = args[0]
+	pub = args[1]
+	cap = args[2]
 
-			imageCentreX = frame.shape[1]/2
-			imageCentreY = frame.shape[0]/2
-			correctionX = imageCentreX - bestFaceCentreX
-			correctionY = imageCentreY - bestFaceCentreY
+	if len(faceCoord) == 4:
+		historical_faces.append(faceCoord)
 
-			if abs(correctionX)>80:
-				#print "Pan ", "right: " if correctionX < 0 else "left: ", correctionX
-				adjust_camera(correctionX, "Pan")
-			if abs(correctionY)>80:
-				#print "Tilt ", "up: " if correctionY < 0 else "down: ", correctionY
-				adjust_camera(-correctionY, "Tilt")		# Camera interprets negative values as up and positive values as down, contrary to expectations
+	bestFace = map(lambda y: sum(y) / len(y), zip(*historical_faces))
 
-			prevBestFace = (bestFaceCentreX, bestFaceCentreY)
-
-		if ret:
-			cv.imshow( 'Camera' , frame )
-
-		key = cv.waitKey(1)
-		if key != -1:
-			if key == ord('q'):
-				break
-			elif key == ord('r'):
-				reset()
+	print bestFace
+	# cv.rectangle(frame, (270, 190), (370, 290), (0, 0, 255), 2)
+	# cv.rectangle(frame, (bestFace[0], bestFace[1]), (bestFace[0]+bestFace[2], bestFace[1]+bestFace[3]), (0, 255, 0), 2)
 
 
-	cap.release()
-	cv.destroyAllWindows()
+	bestFaceCentreX = bestFace[0]+bestFace[2]/2
+	bestFaceCentreY = bestFace[1]+bestFace[2]/2
+
+	imageCentreX = frame.shape[1]/2
+	imageCentreY = frame.shape[0]/2
+	correctionX = imageCentreX - bestFaceCentreX
+	correctionY = imageCentreY - bestFaceCentreY
+
+
+	# if abs(correctionX)>80:
+	# 	#print "Pan ", "right: " if correctionX < 0 else "left: ", correctionX
+	# 	adjust_camera(correctionX, "Pan")
+	# if abs(correctionY)>80:
+	# 	#print "Tilt ", "up: " if correctionY < 0 else "down: ", correctionY
+	# 	adjust_camera(-correctionY, "Tilt")		# Camera interprets negative values as up and positive values as down, contrary to expectations
+
+	# cv.imshow( 'Result' , frame )
+
+	# key = cv.waitKey(1)
+	# if key != -1 and key == ord('q'):
+	# 	cap.release()
+	# 	cv.destroyAllWindows()
+	# 	sys.exit()
 
 
 # Controls pan/tilt of camera
@@ -95,7 +113,10 @@ def reset():
 
 
 def main():
-	webcam_feed()
+
+	rospy.init_node('orbit_face_tracking_main', anonymous=True)
+	pub = rospy.Publisher('orbit_images', Image, queue_size=10)
+	webcam_feed(pub)
 
 if __name__ == '__main__':
 	main()

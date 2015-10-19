@@ -16,6 +16,7 @@ set(CMAKE_TARGET_LINKED_INFO_FILES
 
 # The include file search paths:
 set(CMAKE_C_TARGET_INCLUDE_PATH
+  "/home/andreea/Documents/catkin_ws/devel/include"
   "/opt/ros/jade/include"
   "/usr/include/opencv"
   )

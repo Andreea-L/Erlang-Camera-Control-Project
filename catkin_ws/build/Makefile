@@ -245,6 +245,19 @@ gtest_main/fast:
 .PHONY : gtest_main/fast
 
 #=============================================================================
+# Target rules for targets named _rosorbitcamera_generate_messages_check_deps_Int32Numpy
+
+# Build rule for target.
+_rosorbitcamera_generate_messages_check_deps_Int32Numpy: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 _rosorbitcamera_generate_messages_check_deps_Int32Numpy
+.PHONY : _rosorbitcamera_generate_messages_check_deps_Int32Numpy
+
+# fast build rule for target.
+_rosorbitcamera_generate_messages_check_deps_Int32Numpy/fast:
+	$(MAKE) -f rosorbitcamera/CMakeFiles/_rosorbitcamera_generate_messages_check_deps_Int32Numpy.dir/build.make rosorbitcamera/CMakeFiles/_rosorbitcamera_generate_messages_check_deps_Int32Numpy.dir/build
+.PHONY : _rosorbitcamera_generate_messages_check_deps_Int32Numpy/fast
+
+#=============================================================================
 # Target rules for targets named geometry_msgs_generate_messages_cpp
 
 # Build rule for target.
@@ -401,6 +414,123 @@ rosgraph_msgs_generate_messages_py/fast:
 .PHONY : rosgraph_msgs_generate_messages_py/fast
 
 #=============================================================================
+# Target rules for targets named rosorbitcamera_gencpp
+
+# Build rule for target.
+rosorbitcamera_gencpp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera_gencpp
+.PHONY : rosorbitcamera_gencpp
+
+# fast build rule for target.
+rosorbitcamera_gencpp/fast:
+	$(MAKE) -f rosorbitcamera/CMakeFiles/rosorbitcamera_gencpp.dir/build.make rosorbitcamera/CMakeFiles/rosorbitcamera_gencpp.dir/build
+.PHONY : rosorbitcamera_gencpp/fast
+
+#=============================================================================
+# Target rules for targets named rosorbitcamera_generate_messages
+
+# Build rule for target.
+rosorbitcamera_generate_messages: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera_generate_messages
+.PHONY : rosorbitcamera_generate_messages
+
+# fast build rule for target.
+rosorbitcamera_generate_messages/fast:
+	$(MAKE) -f rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages.dir/build.make rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages.dir/build
+.PHONY : rosorbitcamera_generate_messages/fast
+
+#=============================================================================
+# Target rules for targets named rosorbitcamera_generate_messages_cpp
+
+# Build rule for target.
+rosorbitcamera_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera_generate_messages_cpp
+.PHONY : rosorbitcamera_generate_messages_cpp
+
+# fast build rule for target.
+rosorbitcamera_generate_messages_cpp/fast:
+	$(MAKE) -f rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_cpp.dir/build.make rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_cpp.dir/build
+.PHONY : rosorbitcamera_generate_messages_cpp/fast
+
+#=============================================================================
+# Target rules for targets named rosorbitcamera_generate_messages_eus
+
+# Build rule for target.
+rosorbitcamera_generate_messages_eus: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera_generate_messages_eus
+.PHONY : rosorbitcamera_generate_messages_eus
+
+# fast build rule for target.
+rosorbitcamera_generate_messages_eus/fast:
+	$(MAKE) -f rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_eus.dir/build.make rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_eus.dir/build
+.PHONY : rosorbitcamera_generate_messages_eus/fast
+
+#=============================================================================
+# Target rules for targets named rosorbitcamera_generate_messages_lisp
+
+# Build rule for target.
+rosorbitcamera_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera_generate_messages_lisp
+.PHONY : rosorbitcamera_generate_messages_lisp
+
+# fast build rule for target.
+rosorbitcamera_generate_messages_lisp/fast:
+	$(MAKE) -f rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_lisp.dir/build.make rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_lisp.dir/build
+.PHONY : rosorbitcamera_generate_messages_lisp/fast
+
+#=============================================================================
+# Target rules for targets named rosorbitcamera_generate_messages_py
+
+# Build rule for target.
+rosorbitcamera_generate_messages_py: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera_generate_messages_py
+.PHONY : rosorbitcamera_generate_messages_py
+
+# fast build rule for target.
+rosorbitcamera_generate_messages_py/fast:
+	$(MAKE) -f rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_py.dir/build.make rosorbitcamera/CMakeFiles/rosorbitcamera_generate_messages_py.dir/build
+.PHONY : rosorbitcamera_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named rosorbitcamera_geneus
+
+# Build rule for target.
+rosorbitcamera_geneus: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera_geneus
+.PHONY : rosorbitcamera_geneus
+
+# fast build rule for target.
+rosorbitcamera_geneus/fast:
+	$(MAKE) -f rosorbitcamera/CMakeFiles/rosorbitcamera_geneus.dir/build.make rosorbitcamera/CMakeFiles/rosorbitcamera_geneus.dir/build
+.PHONY : rosorbitcamera_geneus/fast
+
+#=============================================================================
+# Target rules for targets named rosorbitcamera_genlisp
+
+# Build rule for target.
+rosorbitcamera_genlisp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera_genlisp
+.PHONY : rosorbitcamera_genlisp
+
+# fast build rule for target.
+rosorbitcamera_genlisp/fast:
+	$(MAKE) -f rosorbitcamera/CMakeFiles/rosorbitcamera_genlisp.dir/build.make rosorbitcamera/CMakeFiles/rosorbitcamera_genlisp.dir/build
+.PHONY : rosorbitcamera_genlisp/fast
+
+#=============================================================================
+# Target rules for targets named rosorbitcamera_genpy
+
+# Build rule for target.
+rosorbitcamera_genpy: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rosorbitcamera_genpy
+.PHONY : rosorbitcamera_genpy
+
+# fast build rule for target.
+rosorbitcamera_genpy/fast:
+	$(MAKE) -f rosorbitcamera/CMakeFiles/rosorbitcamera_genpy.dir/build.make rosorbitcamera/CMakeFiles/rosorbitcamera_genpy.dir/build
+.PHONY : rosorbitcamera_genpy/fast
+
+#=============================================================================
 # Target rules for targets named sensor_msgs_generate_messages_cpp
 
 # Build rule for target.
@@ -524,6 +654,7 @@ help:
 	@echo "... tests"
 	@echo "... gtest"
 	@echo "... gtest_main"
+	@echo "... _rosorbitcamera_generate_messages_check_deps_Int32Numpy"
 	@echo "... geometry_msgs_generate_messages_cpp"
 	@echo "... geometry_msgs_generate_messages_eus"
 	@echo "... geometry_msgs_generate_messages_lisp"
@@ -536,6 +667,15 @@ help:
 	@echo "... rosgraph_msgs_generate_messages_eus"
 	@echo "... rosgraph_msgs_generate_messages_lisp"
 	@echo "... rosgraph_msgs_generate_messages_py"
+	@echo "... rosorbitcamera_gencpp"
+	@echo "... rosorbitcamera_generate_messages"
+	@echo "... rosorbitcamera_generate_messages_cpp"
+	@echo "... rosorbitcamera_generate_messages_eus"
+	@echo "... rosorbitcamera_generate_messages_lisp"
+	@echo "... rosorbitcamera_generate_messages_py"
+	@echo "... rosorbitcamera_geneus"
+	@echo "... rosorbitcamera_genlisp"
+	@echo "... rosorbitcamera_genpy"
 	@echo "... sensor_msgs_generate_messages_cpp"
 	@echo "... sensor_msgs_generate_messages_eus"
 	@echo "... sensor_msgs_generate_messages_lisp"

@@ -3,6 +3,6 @@ prefix=/home/andreea/Documents/catkin_ws/install
 Name: rosorbitcamera
 Description: Description of rosorbitcamera
 Version: 0.0.0
-Cflags: 
+Cflags: -I/home/andreea/Documents/catkin_ws/install/include
 Libs: -L/home/andreea/Documents/catkin_ws/install/lib 
 Requires: 
