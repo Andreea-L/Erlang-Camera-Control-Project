@@ -1,0 +1,8 @@
+prefix=/home/andreea/Documents/catkin_ws/devel
+
+Name: ROSOrbit
+Description: Description of ROSOrbit
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/andreea/Documents/catkin_ws/devel/lib 
+Requires: 
