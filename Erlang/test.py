@@ -21,28 +21,25 @@ import numpy as np
 from time import sleep
 from math import sqrt
 
+from erlport.erlterms import Atom, List
+from erlport import erlang
+
 UVCDYNCTRLEXEC="/usr/bin/uvcdynctrl"
 
 # Set cascade classifier to use and camera ID (determined with "sudo uvcdynctrl -l")
 faceCascade = cv.CascadeClassifier("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/haarcascade_frontalface_default.xml")
 
 
-def open_webcam_feed(deviceID):
-	print "Opening camera..."
-	cap = cv.VideoCapture(deviceID)
-	print cap
-	return cap
-	#prevBestFace = (None, None)
-
-def close_webcam_feed(cap):
-	print "Closing camera..."
-	cap.release()
-
-def read_webcam_feed(deviceID):
+def read_webcam_feed(receiver, deviceID):
 		# Capture frame-by-frame
-	ret, frame = cv.VideoCapture(deviceID).read()
-	#frame = np.dot(frame[:,:,:3], [0.299, 0.587, 0.144])
-	return frame.tolist() if ret else "err"
+	#erlang.cast(receiver, Atom("mess"))
+	cap = cv.VideoCapture(deviceID)
+	while True:
+		ret, frame = cap.read()
+		#frame = np.dot(frame[:,:,:3], [0.299, 0.587, 0.144])
+		message = [List(frame.tolist())] if ret else [Atom("error")]
+		print "PY: Sending frame..."
+		erlang.cast(receiver, message) 
 
 
 def detect_face(frame):
