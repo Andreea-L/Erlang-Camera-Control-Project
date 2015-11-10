@@ -11,7 +11,7 @@
 
 
 import cv2 as cv
-cv.namedWindow('Camera', cv.WINDOW_AUTOSIZE)
+# cv.namedWindow('Camera', cv.WINDOW_AUTOSIZE)
 
 #import cv_bridge as cvROS
 import subprocess
@@ -20,41 +20,76 @@ import roslib
 import numpy as np
 from time import sleep
 from math import sqrt
+from random import randint
 
 from erlport.erlterms import Atom, List
 from erlport import erlang
+import time
+
+
 
 UVCDYNCTRLEXEC="/usr/bin/uvcdynctrl"
 
 # Set cascade classifier to use and camera ID (determined with "sudo uvcdynctrl -l")
-faceCascade = cv.CascadeClassifier("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/haarcascade_frontalface_default.xml")
+# faceCascade = cv.CascadeClassifier("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/haarcascade_frontalface_default.xml")
+from threading import Thread
 
 
-def read_webcam_feed(receiver, deviceID):
-		# Capture frame-by-frame
-	#erlang.cast(receiver, Atom("mess"))
-	cap = cv.VideoCapture(deviceID)
-	while True:
-		ret, frame = cap.read()
-		#frame = np.dot(frame[:,:,:3], [0.299, 0.587, 0.144])
-		message = [List(frame.tolist())] if ret else [Atom("error")]
-		print "PY: Sending frame..."
-		erlang.cast(receiver, message) 
+def start_detection(receivers, frame):
+	Thread(target=detect_face, args=[receivers, frame]).start()
+	return Atom("ok")
 
-
-def detect_face(frame):
-
+def detect_face(receivers, frame):
+	faceCascade = cv.CascadeClassifier("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/haarcascade_frontalface_default.xml")
 	# Draw reference rectangle in the centre of the image
 	# cv.rectangle(frame, (270, 190), (370, 290), (0, 0, 255), 2)
 
 	# # Run detection
 	frame = np.array(frame, dtype="uint8")
 	bestFace = ()
+	#print "PY: Starting detection on ",frame_id
+
+	start = time.time()
 	faces = faceCascade.detectMultiScale(frame, scaleFactor=1.1, minNeighbors=6, minSize=(50, 50), maxSize=(250, 250), flags=cv.cv.CV_HAAR_SCALE_IMAGE)
+	stop = time.time()
+	print "PY: Detection finished. ",stop-start," ms"
 	if faces != () and faces.size > 0:		# OpenCv strangely returns empty tuples occasionally, so check for that
 		bestFace = max(faces, key=lambda item:item[2])
 
-	return bestFace
+	[erlang.cast(receiver, [bestFace]) for receiver in receivers]
+
+
+def start_feed(receivers, deviceID):
+	Thread(target=read_webcam_feed, args=[receivers, deviceID]).start()
+	return Atom("ok")
+
+def read_webcam_feed(receivers, deviceID):
+
+	cap = cv.VideoCapture(deviceID)
+	#i=0
+	while True:
+		ret, frame = cap.read()
+		#frame = np.dot(frame[:,:,:3], [0.299, 0.587, 0.144])
+		message = [List(frame.tolist())] if ret else [Atom("error")]
+		#i+=1
+		print "PY: Sending frame..."
+		erlang.cast(receivers[randint(0,len(receivers)-1)], message) 
+
+
+# def detect_face(frame):
+
+# 	# Draw reference rectangle in the centre of the image
+# 	# cv.rectangle(frame, (270, 190), (370, 290), (0, 0, 255), 2)
+
+# 	# # Run detection
+# 	print frame
+# 	frame = np.array(frame, dtype="uint8")
+# 	bestFace = ()
+# 	faces = faceCascade.detectMultiScale(frame, scaleFactor=1.1, minNeighbors=6, minSize=(50, 50), maxSize=(250, 250), flags=cv.cv.CV_HAAR_SCALE_IMAGE)
+# 	if faces != () and faces.size > 0:		# OpenCv strangely returns empty tuples occasionally, so check for that
+# 		bestFace = max(faces, key=lambda item:item[2])
+
+# 	return bestFace
 		# 	cv.rectangle(frame, (bestFace[0], bestFace[1]), (bestFace[0]+bestFace[2], bestFace[1]+bestFace[3]), (0, 255, 0), 2)
 
 		# 	# bestFaceCentreX = bestFace[0]+bestFace[2]/2
