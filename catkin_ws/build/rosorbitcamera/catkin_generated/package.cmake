@@ -1,7 +1,0 @@
-set(_CATKIN_CURRENT_PACKAGE "rosorbitcamera")
-set(rosorbitcamera_MAINTAINER "andreea <andreea@todo.todo>")
-set(rosorbitcamera_DEPRECATED "")
-set(rosorbitcamera_VERSION "0.0.0")
-set(rosorbitcamera_BUILD_DEPENDS "message_generation" "cv_bridge" "roscpp" "rospy")
-set(rosorbitcamera_RUN_DEPENDS "message_runtime" "cv_bridge" "roscpp" "rospy")
-set(rosorbitcamera_BUILDTOOL_DEPENDS "catkin")
