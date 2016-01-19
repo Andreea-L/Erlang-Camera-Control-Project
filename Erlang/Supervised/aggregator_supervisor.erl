@@ -12,6 +12,6 @@ start_link() ->
 	Ref.
 
 init(Args) ->
-	ChildSpec = {aggregator, {facetracking, aggregate_faces, [queue:new()]},
-				 permanent, 2000, worker, [facetracking]},
+	ChildSpec = {aggregator_server, {aggregator_server, start_link, []},
+				 permanent, 2000, worker, [aggregator_server]},
 	{ok, {{one_for_one, 1, 1}, [ChildSpec]}}.
