@@ -1,6 +1,5 @@
 -module(aggregator_server).
 -author('andreea.lutac').
-%-define(SERVER, ?MODULE).
 -export([                      
   start_link/0, 
   stop/0,
@@ -16,7 +15,7 @@
 
 
 start_link() ->
-    gen_server:start_link({global, ?MODULE}, ?MODULE, [], []).
+  gen_server:start_link({global, ?MODULE}, ?MODULE, [], []).
 
 stop() ->
 	gen_server:cast(self(), stop).
@@ -28,11 +27,39 @@ get_face() ->
   gen_server:call(self(), get_face).
 
 init([]) ->
-	Faces_Q=queue:new(),
+  T = os:system_time(),
+  io:format("Start time of aggregator: ~p ~n",[T]),
+  %erlang:write_file(agg_timing, T, [append]),
+  Faces_Q=queue:new(),
   {ok, Faces_Q}.
 
-handle_cast({face, Face}, Faces_Q) ->
-	case queue:len(Faces_Q)==10 of
+handle_cast({face, FID, Face}, Faces_Q) ->
+  %io:format("Got face. ~n", []),
+  T = os:system_time(),
+  {Result, Device} = file:open("/home/andreea/Documents/ErlangProject/Supervised/roundtrip_timing_erl.time", [append]),
+  io:format(Device, "ERLa:~p:~p~n", [FID,T]),
+  file:close(Device),
+  Faces_L = queue:to_list(Faces_Q),
+
+  BestX = [ lists:nth(1,L) ||  L <- Faces_L, length(L)>0 ],
+  BestY = [ lists:nth(2,L) ||  L <- Faces_L, length(L)>0 ],
+  BestHW = [ lists:nth(3,L) ||  L <- Faces_L, length(L)>0 ],
+
+  if 
+    length(BestX)>0 ->
+      BestFace = {round(lists:sum(BestX)/length(BestX)), 
+                  round(lists:sum(BestY)/length(BestY)), 
+                  round(lists:sum(BestHW)/length(BestHW)), 
+                  round(lists:sum(BestHW)/length(BestHW))},
+      % {ok, PyInstance} = python:start([{python_path, "/home/andreea/Documents/ErlangProject/Supervised"}]),
+      % python:call(PyInstance, facetracking, display_face, [BestFace]);
+      io:format("Best face: ~p~n", [BestFace]);
+    true ->
+      io:format("Best face: ~p~n", [[]])
+      % ok
+  end,
+
+	case queue:len(Faces_Q)==100 of
         true ->
           F1 = queue:drop(Faces_Q),
           F2 = queue:in(Face, F1),

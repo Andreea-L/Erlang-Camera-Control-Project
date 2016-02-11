@@ -1,6 +1,5 @@
 -module(face_server).
 -author('andreea.lutac').
-%-define(SERVER, ?MODULE).
 -export([                      
   start_link/1, 
   stop/0,
@@ -15,26 +14,34 @@
 
 
 start_link(Name) ->
-    gen_server:start_link({global, Name}, ?MODULE, [], []).
+  gen_server:start_link({global, Name}, ?MODULE, [], []).
 
 stop() ->
 	gen_server:cast(self(), stop).
 
 image_feed({frame, Frame}) ->
 	gen_server:cast(self(), {frame, Frame}).
-	
-% aggregate({face, Face}) ->
-%   gen_server:cast(self(), {face, Face})
+
 
 init([]) ->
-	{ok, PyInstance} = python:start([{python_path, "/home/andreea/Documents/ErlangProject"}]),
+  T = os:system_time(),
+  io:format("Start time of ~p : ~p ~n",[self(), T]),
+  {Result, Device} = file:open("/home/andreea/Documents/ErlangProject/Supervised/face_timing.time", [append]),
+  io:format(Device, "~p~n", [T]),
+  io:format(Device, "~n", []),
+	file:close(Device),
+
+  {ok, PyInstance} = python:start([{python_path, "/home/andreea/Documents/ErlangProject/Supervised"}]),
   {ok, PyInstance}.
 
-handle_cast({frame, Frame}, PyInstance) ->
-	python:call(PyInstance, test, detect_face, [self(), Frame]);
-
-% handle_cast({face, Face}, PyInstance) ->
-% 	aggregator_server:aggregate(Face);
+handle_cast({frame,FID, Frame}, PyInstance) ->
+  %io:format("Got frame at: ~p ~n", [self()]),
+  T = os:system_time(),
+  {Result, Device} = file:open("/home/andreea/Documents/ErlangProject/Supervised/roundtrip_timing_erl.time", [append]),
+  io:format(Device, "ERLr:~p:~p~n", [FID,T]),
+  file:close(Device),
+	python:call(PyInstance, facetracking, detect_face, [Frame]),
+  {noreply, PyInstance};
 
 handle_cast(stop, PyInstance) ->
 	{stop, normal, PyInstance}.

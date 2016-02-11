@@ -10,14 +10,15 @@
 
 
 % Supervisor for face detection processes
-
-
 start_link(Args) ->
 	Ref = supervisor:start_link({local, ?SERVER}, ?MODULE, Args),
 	Ref.
 
 % Recursively starts "Times" x face detection processes
 init(Args) -> 
+	T = os:system_time(),
+	io:format("Start time of face_supervisor: ~p ~n",[T]),
+	%erlang:write_file(face_sup_timing, T, [append]),
 	Times = lists:nth(1, Args),
 	init(Times, []).
 
@@ -25,6 +26,4 @@ init(0, Acc) ->
 	{ok, {{one_for_one, 1, 1}, Acc}};
 init(Times, Acc) ->
 	ChildSpec = ?CHILD(face_server, Times, worker),
-	% ChildSpec = {Times, {face_server, start_link, [Times]},
-	%			 permanent, 2000, worker, [face_server]},
 	init(Times-1, append(Acc, [ChildSpec])).
