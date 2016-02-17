@@ -23,6 +23,7 @@ import sys
 import rospy
 import roslib
 from time import sleep, time
+from random import randint
 from math import sqrt
 from collections import deque
 from sensor_msgs.msg import Image
@@ -36,32 +37,44 @@ deviceID = 1
 historical_faces = deque(maxlen=100)
 a_j = 0
 
-a_f = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/aggregator_timing.time", "a") 
-pub_f = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/publishing_timing.time", "a")
-f = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/roundtrip_timing.time", "a")
+a_f = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/Timing/aggregator_timing.time", "a+") 
+pub_f = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/Timing/publishing_timing.time", "a+")
+f = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/Timing/roundtrip_timing.time", "a+")
 
-def webcam_feed(pub):
+def webcam_feed(publishers):
 	global frame,f
 
 	T = int(time() * 1000)
 	print "Main node started at: ", T
-	# f = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/main_timing.time", "a")
-	# f.write(str(T)+"\n\n")
-	# f.close()
+	
 
 	print "Opening camera..."
+
 	cap = cv.VideoCapture(deviceID)
+	
 	rate = rospy.Rate(3)
 
+	# workers = pub.get_num_connections()
+	# print "Number of workers: ",workers
+	subscribers = []
+	for i in xrange(len(publishers)):
+		subscribers += [rospy.Subscriber('orbit_faces'+str(i), Int32Numpy, display_face, callback_args=[i, cap])]
 	
 	j = 0
 	while not rospy.is_shutdown():
 		# Capture frame-by-frame
 		ret, frame = cap.read()
+		T = int(time() * 1000)
+		fps = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/Timing/main_timing.time", "a+")
+		fps.write(str(T)+"\n\n")
+		fps.close()
+
 		msg = bridge.cv2_to_imgmsg(frame)
+		pub = publishers[randint(0,len(publishers)-1)]
 
 		f.write("s:"+str(j)+":"+str(int(time() * 1000))+"\n")
 		j+=1
+		msg.header.frame_id = str(j)
 		start_pub = int(time() * 1000)
 		pub.publish(msg)
 		end_pub = int(time() * 1000)
@@ -70,23 +83,30 @@ def webcam_feed(pub):
 		#print "Published frame ", j
 
 
-		workers = pub.get_num_connections()
-		subscribers = []
-		for i in xrange(workers):
-			subscribers += [rospy.Subscriber('orbit_faces'+str(i), Int32Numpy, display_face, callback_args=[i, pub, cap])]
+		# workers = pub.get_num_connections()
+		# subscribers = []
+		# for i in xrange(workers):
+		# 	subscribers += [rospy.Subscriber('orbit_faces'+str(i), Int32Numpy, display_face, callback_args=[i, pub, cap])]
+		if len(subscribers)<len(publishers):
+			subscribers = []
+			for i in xrange(len(publishers)):
+				subscribers += [rospy.Subscriber('orbit_faces'+str(i), Int32Numpy, display_face, callback_args=[i, cap])]
+
 	f.close()
 
 def display_face(faceCoord, args):
 	global frame, historical_faces, a_j,a_f
 
-	a_f.write("a:"+str(a_j)+":"+str(int(time() * 1000))+"\n")
-	a_j+=1
+	faceID = faceCoord.data[-1]
 
-	faceCoord = faceCoord.data
+	#a_j+=1
+
+	faceCoord = faceCoord.data[:-1]
 	workerID = args[0]
-	pub = args[1]
-	cap = args[2]
+	cap = args[1]
 
+	a_f.write("a:"+str(workerID)+":"+str(faceID)+":"+str(int(time() * 1000))+"\n")
+	
 	if len(faceCoord) == 4:
 		historical_faces.append(faceCoord)
 
@@ -114,13 +134,13 @@ def display_face(faceCoord, args):
 	# 	#print "Tilt ", "up: " if correctionY < 0 else "down: ", correctionY
 	# 	adjust_camera(-correctionY, "Tilt")		# Camera interprets negative values as up and positive values as down, contrary to expectations
 
-	cv.imshow( 'Result' , frame )
+	# cv.imshow( 'Result' , frame )
 
-	key = cv.waitKey(1)
-	if key != -1 and key == ord('q'):
-		cap.release()
-		cv.destroyAllWindows()
-		sys.exit()
+	# key = cv.waitKey(1)
+	# if key != -1 and key == ord('q'):
+	# 	cap.release()
+	# 	cv.destroyAllWindows()
+	# 	sys.exit()
 
 
 # Controls pan/tilt of camera
@@ -137,10 +157,13 @@ def reset():
 
 
 def main():
-
+	expected_workers = int(sys.argv[1])
 	rospy.init_node('orbit_face_tracking_main', anonymous=True)
-	pub = rospy.Publisher('orbit_images', Image, queue_size=10)
-	webcam_feed(pub)
+	
+	publishers = []
+	for i in xrange(expected_workers):
+		publishers += [ rospy.Publisher('orbit_images'+str(i), Image, queue_size=10) ]
+	webcam_feed(publishers)
 
 if __name__ == '__main__':
 	main()

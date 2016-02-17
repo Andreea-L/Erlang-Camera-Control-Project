@@ -13,5 +13,5 @@ start(Args) ->
 
 	{ok, TopSuper} = top_supervisor:start_link([FacesN]),
 	io:format("Supervision tree started. ~n", []),
-	python:call(FeedInstance, facetracking, read_webcam_feed, [FacesN, DeviceID]).	
+	python:call(FeedInstance, facetracking_no_rt, read_webcam_feed, [FacesN, DeviceID]).	
 

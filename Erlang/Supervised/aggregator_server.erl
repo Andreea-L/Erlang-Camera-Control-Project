@@ -26,6 +26,17 @@ aggregate({face, Face}) ->
 get_face() ->
   gen_server:call(self(), get_face).
 
+update_queue(Faces_Q, Face) ->
+  case queue:len(Faces_Q)==10 of
+        true ->
+          F1 = queue:drop(Faces_Q),
+          F2 = queue:in(Face, F1),
+          F2;
+        false ->
+          F2 = queue:in(Face, Faces_Q),
+          F2
+  end.
+
 init([]) ->
   T = os:system_time(),
   io:format("Start time of aggregator: ~p ~n",[T]),
@@ -33,12 +44,14 @@ init([]) ->
   Faces_Q=queue:new(),
   {ok, Faces_Q}.
 
-handle_cast({face, FID, Face}, Faces_Q) ->
-  %io:format("Got face. ~n", []),
+handle_cast({face, FID, WorkerPID, Face}, Faces_Q) ->
+  io:format("Got face. ~p~n", [FID]),
   T = os:system_time(),
-  {Result, Device} = file:open("/home/andreea/Documents/ErlangProject/Supervised/roundtrip_timing_erl.time", [append]),
-  io:format(Device, "ERLa:~p:~p~n", [FID,T]),
+  {Result, Device} = file:open("/home/andreea/Documents/ErlangProject/Supervised/Timing/roundtrip_timing_erl.time", [append]),
+  io:format(Device, "ERLa:~p:~p:~p~n", [WorkerPID,FID,T]),
   file:close(Device),
+
+  Q = update_queue(Faces_Q, Face),
   Faces_L = queue:to_list(Faces_Q),
 
   BestX = [ lists:nth(1,L) ||  L <- Faces_L, length(L)>0 ],
@@ -53,21 +66,16 @@ handle_cast({face, FID, Face}, Faces_Q) ->
                   round(lists:sum(BestHW)/length(BestHW))},
       % {ok, PyInstance} = python:start([{python_path, "/home/andreea/Documents/ErlangProject/Supervised"}]),
       % python:call(PyInstance, facetracking, display_face, [BestFace]);
-      io:format("Best face: ~p~n", [BestFace]);
+      %io:format("Best face: ~p~n", [BestFace]);
+      {Result1, Device1} = file:open("/home/andreea/Pictures/Webcam/Faces/face.coord", [append]),
+      io:format(Device1, "ERL:~p:~p ~p ~p ~p~n", [FID,element(1,BestFace),element(2,BestFace),element(1,BestFace)+element(3,BestFace),element(2,BestFace)+element(4,BestFace)]),
+      file:close(Device1);
     true ->
-      io:format("Best face: ~p~n", [[]])
-      % ok
+      %io:format("Best face: ~p~n", [[]])
+      ok
   end,
-
-	case queue:len(Faces_Q)==100 of
-        true ->
-          F1 = queue:drop(Faces_Q),
-          F2 = queue:in(Face, F1),
-          {noreply, F2};
-        false ->
-          F2 = queue:in(Face, Faces_Q),
-          {noreply, F2}
-  end;
+  {noreply, Q};
+	
 
 handle_cast(stop, Faces_Q) ->
 	{stop, normal, Faces_Q}.

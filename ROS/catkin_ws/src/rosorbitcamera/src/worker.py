@@ -23,23 +23,21 @@ import time
 from sensor_msgs.msg import Image
 from rosorbitcamera.msg import Int32Numpy
 
-i=0
 
 def detect_face(msg, args):
-	global i
 
-	f = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/roundtrip_timing.time", "a")
-	f.write("r:"+str(i)+":"+str(int(time.time() * 1000))+"\n\n")
-	i+=1
-	f.close()
-
+	# f = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/Timing/roundtrip_timing.time", "a+")
+	# f.write("r:"+str(i)+":"+str(int(time.time() * 1000))+"\n\n")
+	# i+=1
+	# f.close()
+	frameID = int(msg.header.frame_id)
 	frame = bridge.imgmsg_to_cv2(msg)
 
 	#print "Received frame ", i
 
 	# Run detection
 	faceCascade=args[2]
-	det_f = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/detection_timing.time", "a")
+	det_f = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/Timing/detection_timing.time", "a+")
 	start_det = int(time.time() * 1000)
 	faces = faceCascade.detectMultiScale(frame, scaleFactor=1.1, minNeighbors=6, minSize=(50, 50), maxSize=(250, 250), flags=cv.cv.CV_HAAR_SCALE_IMAGE)
 	end_det = int(time.time() * 1000)
@@ -52,8 +50,9 @@ def detect_face(msg, args):
 	
 	pub=args[0]
 	rate=args[1]
-	pub.publish(bestFace.tolist() if bestFace != [] else bestFace)
+	pub.publish(bestFace.tolist()+[frameID] if bestFace != [] else [frameID])
 	rate.sleep()
+
 
 
 def main():
@@ -71,7 +70,7 @@ def main():
 
 	rospy.init_node('orbit_face_tracking_n'+str(nodeID), anonymous=True)
 	pub = rospy.Publisher('orbit_faces'+str(nodeID), Int32Numpy, queue_size=10)
-	rospy.Subscriber('orbit_images', Image, detect_face, callback_args=[pub,rospy.Rate(3),faceCascade])
+	rospy.Subscriber('orbit_images'+str(nodeID), Image, detect_face, callback_args=[pub,rospy.Rate(3),faceCascade])
 	rospy.spin()
 
 if __name__ == '__main__':

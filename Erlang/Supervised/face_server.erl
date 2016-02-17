@@ -24,23 +24,23 @@ image_feed({frame, Frame}) ->
 
 
 init([]) ->
-  T = os:system_time(),
-  io:format("Start time of ~p : ~p ~n",[self(), T]),
-  {Result, Device} = file:open("/home/andreea/Documents/ErlangProject/Supervised/face_timing.time", [append]),
-  io:format(Device, "~p~n", [T]),
-  io:format(Device, "~n", []),
-	file:close(Device),
+  % T = os:system_time(),
+  % io:format("Start time of ~p : ~p ~n",[self(), T]),
+  % {Result, Device} = file:open("/home/andreea/Documents/ErlangProject/Supervised/Timing/face_timing.time", [append]),
+ %  io:format(Device, "~p~n", [T]),
+ %  io:format(Device, "~n", []),
+	% file:close(Device),
 
   {ok, PyInstance} = python:start([{python_path, "/home/andreea/Documents/ErlangProject/Supervised"}]),
   {ok, PyInstance}.
 
 handle_cast({frame,FID, Frame}, PyInstance) ->
-  %io:format("Got frame at: ~p ~n", [self()]),
-  T = os:system_time(),
-  {Result, Device} = file:open("/home/andreea/Documents/ErlangProject/Supervised/roundtrip_timing_erl.time", [append]),
-  io:format(Device, "ERLr:~p:~p~n", [FID,T]),
-  file:close(Device),
-	python:call(PyInstance, facetracking, detect_face, [Frame]),
+  % T = os:system_time(),
+  % {Result, Device} = file:open("/home/andreea/Documents/ErlangProject/Supervised/Timing/roundtrip_timing_erl.time", [append]),
+  % io:format(Device, "ERLr:~p:~p~n", [FID,T]),
+  % file:close(Device),
+  io:format("Got frame: ~p~n", [FID]),
+	python:call(PyInstance, facetracking_no_rt, detect_face, [Frame, FID,self()]),
   {noreply, PyInstance};
 
 handle_cast(stop, PyInstance) ->

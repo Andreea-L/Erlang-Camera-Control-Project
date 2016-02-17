@@ -1,5 +1,4 @@
 <launch>
-  <node name="orbit_face_tracking_main" pkg="rosorbitcamera" type="facetracking.py" respawn="true" output="screen"/>
-  <node name="orbit_face_tracking_n0" pkg="rosorbitcamera" type="worker.py" args="0 2" respawn="true" output="screen"/>
-  
+<node name="orbit_face_tracking_main" pkg="rosorbitcamera" type="facetracking_no_rt.py" args="1" output="screen"/>
+<node name="orbit_face_tracking_n0" pkg="rosorbitcamera" type="worker.py" args="0 1" output="screen"/>
 </launch>
