@@ -24,4 +24,4 @@ init(Args) ->
 	Aggregator = ?CHILD(aggregator_supervisor, aggregator_supervisor, supervisor, []),
 	Faces = ?CHILD(face_supervisor, face_supervisor, supervisor, [FacesN]),
 
-	{ok, {{one_for_one, 1, 1}, [Faces, Aggregator]}}.
+	{ok, {{one_for_one, 1000, 1}, [Faces, Aggregator]}}.

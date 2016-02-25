@@ -38,11 +38,11 @@ for f in files_stop:
 	ros = [ [x[1],x[2].split(" ")] for x in values if x[0]=="ROS"]
 	erl = [ [x[1],x[2].split(" ")] for x in values if x[0]=="ERL"]
 	res.write("\n##Jaccard index of similarity variation (ROS):\n")
-	for idx in [ jaccard_index([actual[int(x[0])], x[1]], "ros", x[0]) for x in ros[:-1]]: 
-		res.write('%.3f ' % idx)
+	for idx in [ jaccard_index([actual[int(x[0])-1], x[1]], "ros", x[0]) for x in ros[:-1]]: 
+		res.write('%.3f,' % idx)
 	res.write("\n##Jaccard index of similarity variation (ERL):\n")
-	for idx in [ jaccard_index([actual[int(x[0])], x[1]], "erl", x[0]) for x in erl]:
-		res.write('%.3f ' % idx)
+	for idx in [ jaccard_index([actual[int(x[0])-1], x[1]], "erl", x[0]) for x in erl]:
+		res.write('%.3f,' % idx)
 	res.write("\n\n")
 	i+=1
 
@@ -54,10 +54,21 @@ for f in files_kill:
 	ros = [ [x[1],x[2].split(" ")] for x in values if x[0]=="ROS"]
 	erl = [ [x[1],x[2].split(" ")] for x in values if x[0]=="ERL"]
 	res.write("\n##Jaccard index of similarity variation (ROS):\n")
-	for idx in [ jaccard_index([actual[int(x[0])], x[1]], "ros", x[0]) for x in ros[:-1]]:
-		res.write('%.3f ' % idx)
+	for idx in [ jaccard_index([actual[int(x[0])-1], x[1]], "ros", x[0]) for x in ros[:-1]]:
+		res.write('%.3f,' % idx)
 	res.write("\n##Jaccard index of similarity variation (ERL):\n")
-	for idx in [ jaccard_index([actual[int(x[0])], x[1]], "erl", x[0]) for x in erl]:
-		res.write('%.3f ' % idx)
+	for idx in [ jaccard_index([actual[int(x[0])-1], x[1]], "erl", x[0]) for x in erl]:
+		res.write('%.3f,' % idx)
 	res.write("\n\n")
 	i+=1
+
+main_val =  [ x.split(":") for x in main_kill.readlines() ]
+agg_val = [ x.split(":") for x in agg_kill.readlines() ]
+ros = [ [x[1],x[2].split(" ")] for x in main_val if x[0]=="ROS"]
+erl = [ [x[1],x[2].split(" ")] for x in agg_val if x[0]=="ERL"]
+res.write("\n##Jaccard index of similarity variation (ROS), killed main node:\n")
+for idx in [ jaccard_index([actual[int(x[0])-1], x[1]], "ros", x[0]) for x in ros[:-1]]: 
+		res.write('%.3f,' % idx)
+res.write("\n##Jaccard index of similarity variation (ERL), killed aggregator:\n")
+for idx in [ jaccard_index([actual[int(x[0])-1], x[1]], "erl", x[0]) for x in erl]:
+		res.write('%.3f,' % idx)

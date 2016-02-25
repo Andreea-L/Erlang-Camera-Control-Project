@@ -23,7 +23,7 @@ init(Args) ->
 	init(Times, []).
 
 init(0, Acc) -> 
-	{ok, {{one_for_one, 1, 1}, Acc}};
+	{ok, {{one_for_one, 1000, 1}, Acc}};
 init(Times, Acc) ->
 	ChildSpec = ?CHILD(face_server, Times, worker),
 	init(Times-1, append(Acc, [ChildSpec])).

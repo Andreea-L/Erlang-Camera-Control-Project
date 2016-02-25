@@ -32,13 +32,13 @@ from rosorbitcamera.msg import Int32Numpy
 UVCDYNCTRLEXEC="/usr/bin/uvcdynctrl"
 
 # Set cascade classifier to use and camera ID (determined with "sudo uvcdynctrl -l")
-deviceID = 1
+deviceID = 0
 
 historical_faces = deque(maxlen=100)
 a_j = 0
 
 a_f = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/Timing/aggregator_timing.time", "a+") 
-pub_f = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/Timing/publishing_timing.time", "a+")
+send_f = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/Timing/send_timing.time", "a+")
 f = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/Timing/roundtrip_timing.time", "a+")
 
 def webcam_feed(publishers):
@@ -52,7 +52,7 @@ def webcam_feed(publishers):
 
 	cap = cv.VideoCapture(deviceID)
 	
-	rate = rospy.Rate(3)
+	rate = rospy.Rate(10)
 
 	# workers = pub.get_num_connections()
 	# print "Number of workers: ",workers
@@ -64,22 +64,22 @@ def webcam_feed(publishers):
 	while not rospy.is_shutdown():
 		# Capture frame-by-frame
 		ret, frame = cap.read()
-		T = int(time() * 1000)
-		fps = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/Timing/main_timing.time", "a+")
-		fps.write(str(T)+"\n\n")
-		fps.close()
+		# T = int(time() * 1000)
+		# fps = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/Timing/main_timing.time", "a+")
+		# fps.write(str(T)+"\n\n")
+		# fps.close()
 
 		msg = bridge.cv2_to_imgmsg(frame)
 		pub = publishers[randint(0,len(publishers)-1)]
 
-		f.write("s:"+str(j)+":"+str(int(time() * 1000))+"\n")
-		j+=1
+		send_f.write("s:"+str(j)+":"+str(int(time() * 1000000))+"\n")
 		msg.header.frame_id = str(j)
-		start_pub = int(time() * 1000)
+		j+=1
+		#start_pub = int(time() * 1000)
 		pub.publish(msg)
-		end_pub = int(time() * 1000)
+		#end_pub = int(time() * 1000)
 		rate.sleep()
-		pub_f.write(str(end_pub-start_pub)+"\n")
+		#pub_f.write(str(end_pub-start_pub)+"\n")
 		#print "Published frame ", j
 
 
@@ -105,7 +105,7 @@ def display_face(faceCoord, args):
 	workerID = args[0]
 	cap = args[1]
 
-	a_f.write("a:"+str(workerID)+":"+str(faceID)+":"+str(int(time() * 1000))+"\n")
+	a_f.write("a:"+str(workerID)+":"+str(faceID)+":"+str(int(time() * 1000000))+"\n")
 	
 	if len(faceCoord) == 4:
 		historical_faces.append(faceCoord)
@@ -162,7 +162,7 @@ def main():
 	
 	publishers = []
 	for i in xrange(expected_workers):
-		publishers += [ rospy.Publisher('orbit_images'+str(i), Image, queue_size=10) ]
+		publishers += [ rospy.Publisher('orbit_images'+str(i), Image, queue_size=1000) ]
 	webcam_feed(publishers)
 
 if __name__ == '__main__':

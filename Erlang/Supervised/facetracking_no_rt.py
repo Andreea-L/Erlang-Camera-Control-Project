@@ -35,12 +35,10 @@ def natural_sort(l):
     return sorted(l, key = alphanum_key)
 
 def detect_face(frame, fid, worker):
-	print "PY: Received frame."
 	# f = open("/home/andreea/Documents/ErlangProject/Supervised/Timing/roundtrip_timing_py.time", "a") 
 	# f.write("PYg:"+str(fid)+":"+str(int(time.time() * 1000000000))+"\n")
-
 	suffix = randint(1,4)
-	faceCascade = cv.CascadeClassifier("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/HaarClassifiers/haarcascade_frontalface_"str(suffix)+".xml")
+	faceCascade = cv.CascadeClassifier("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/HaarClassifiers/haarcascade_frontalface_1.xml")
 
 	#flat_frame = zlib.decompress(frame)
 	#flat_frame = [int(i) for i in flat_frame.split(" ")]
@@ -58,18 +56,17 @@ def detect_face(frame, fid, worker):
 
 	# f.write("PYf:"+str(fid)+":"+str(int(time.time() * 1000000000))+"\n")
 	# f.close()
-	print bestFace
 	erlang.call(Atom("gen_server"), Atom("cast"), [(Atom("global"),Atom("aggregator_server")), (Atom("face"),fid, worker, bestFace)])
 
 
 
 def read_webcam_feed(detectorsN, deviceID):
-
+	
 	#cap = cv.VideoCapture(deviceID)
 	#i=0
 	pics={}
 	j = 0
-	for filename in natural_sort(glob.glob('/home/andreea/Pictures/Webcam/*.jpg')):
+	for filename in natural_sort(glob.glob('/home/andreea/Pictures/Webcam/Input/*.jpg')):
 		pics[j]=cv.imread(filename)
 		j+=1
 	j=0
@@ -79,16 +76,15 @@ def read_webcam_feed(detectorsN, deviceID):
 		# fps = open("/home/andreea/Documents/ErlangProject/Supervised/Timing/main_timing.time", "a+")
 		# fps.write(str(T)+"\n\n")
 		# fps.close()
-		
+		print "PY:Sending frame ",j
 		frame = cv.cvtColor(pics[key], cv.COLOR_BGR2GRAY)
 		
 		#c_frame = zlib.compress(' '.join(str(e) for f in frame for e in f),9)
-		message = (Atom("frame"),j,frame)
+		message = (Atom("frame"),j+1,frame)
 		#i+=1
-		print "PY: Sending frame..."
-		time.sleep(0.5)
+		time.sleep(0.3)
 		
-		receiver = randint(0,detectorsN)
+		receiver = randint(1,detectorsN)
 		f = open("/home/andreea/Documents/ErlangProject/Supervised/Timing/roundtrip_timing_py.time", "a") 
 		f.write("PYs:"+str(j)+":"+str(int(time.time() * 1000000000))+"\n")
 		j+=1

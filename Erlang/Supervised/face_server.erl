@@ -24,8 +24,8 @@ image_feed({frame, Frame}) ->
 
 
 init([]) ->
-  % T = os:system_time(),
-  % io:format("Start time of ~p : ~p ~n",[self(), T]),
+  T = os:system_time(),
+  io:format("Start time of face server ~p : ~p ~n",[self(), T]),
   % {Result, Device} = file:open("/home/andreea/Documents/ErlangProject/Supervised/Timing/face_timing.time", [append]),
  %  io:format(Device, "~p~n", [T]),
  %  io:format(Device, "~n", []),
@@ -35,18 +35,30 @@ init([]) ->
   {ok, PyInstance}.
 
 handle_cast({frame,FID, Frame}, PyInstance) ->
-  % T = os:system_time(),
-  % {Result, Device} = file:open("/home/andreea/Documents/ErlangProject/Supervised/Timing/roundtrip_timing_erl.time", [append]),
-  % io:format(Device, "ERLr:~p:~p~n", [FID,T]),
-  % file:close(Device),
-  io:format("Got frame: ~p~n", [FID]),
+  T = os:system_time(),
+  {Result, Device} = file:open("/home/andreea/Documents/ErlangProject/Supervised/Timing/roundtrip_timing_erl.time", [append]),
+  io:format(Device, "ERLr:~p:~p~n", [FID,T]),
+  file:close(Device),
 	python:call(PyInstance, facetracking_no_rt, detect_face, [Frame, FID,self()]),
   {noreply, PyInstance};
 
 handle_cast(stop, PyInstance) ->
+  python:stop(PyInstance),
 	{stop, normal, PyInstance}.
 
 handle_call(_Message, _From, PyInstance) -> {noreply, PyInstance}.
-handle_info(_Message, PyInstance) -> {noreply, PyInstance}.
-terminate(_Reason, _PyInstance) -> ok.
+handle_info(_Message, PyInstance) ->
+  case _Message of
+    stop ->
+       gen_server:cast(self(), stop);
+    kill ->
+       terminate(shutdown, PyInstance);
+    _Other ->
+       io:format("What was that?~n",[])
+   end , 
+  {noreply, PyInstance}.
+
+terminate(_Reason, _PyInstance) -> 
+  python:stop(_PyInstance),
+  ok.
 code_change(_OldVersion, PyInstance, _Extra) -> {ok, PyInstance}.

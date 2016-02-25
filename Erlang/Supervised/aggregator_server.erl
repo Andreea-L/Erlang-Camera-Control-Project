@@ -27,7 +27,7 @@ get_face() ->
   gen_server:call(self(), get_face).
 
 update_queue(Faces_Q, Face) ->
-  case queue:len(Faces_Q)==10 of
+  case queue:len(Faces_Q)==3 of
         true ->
           F1 = queue:drop(Faces_Q),
           F2 = queue:in(Face, F1),
@@ -45,15 +45,14 @@ init([]) ->
   {ok, Faces_Q}.
 
 handle_cast({face, FID, WorkerPID, Face}, Faces_Q) ->
-  io:format("Got face. ~p~n", [FID]),
+  io:format("Received face: ~p, ~p~n", [FID,Face]),
   T = os:system_time(),
   {Result, Device} = file:open("/home/andreea/Documents/ErlangProject/Supervised/Timing/roundtrip_timing_erl.time", [append]),
   io:format(Device, "ERLa:~p:~p:~p~n", [WorkerPID,FID,T]),
   file:close(Device),
 
   Q = update_queue(Faces_Q, Face),
-  Faces_L = queue:to_list(Faces_Q),
-
+  Faces_L = queue:to_list(Q),
   BestX = [ lists:nth(1,L) ||  L <- Faces_L, length(L)>0 ],
   BestY = [ lists:nth(2,L) ||  L <- Faces_L, length(L)>0 ],
   BestHW = [ lists:nth(3,L) ||  L <- Faces_L, length(L)>0 ],
@@ -67,11 +66,12 @@ handle_cast({face, FID, WorkerPID, Face}, Faces_Q) ->
       % {ok, PyInstance} = python:start([{python_path, "/home/andreea/Documents/ErlangProject/Supervised"}]),
       % python:call(PyInstance, facetracking, display_face, [BestFace]);
       %io:format("Best face: ~p~n", [BestFace]);
-      {Result1, Device1} = file:open("/home/andreea/Pictures/Webcam/Faces/face.coord", [append]),
+      {Result1, Device1} = file:open("/home/andreea/Pictures/Webcam/Reliability/aggkill.coord", [append]),
+      % {Result1, Device1} = file:open("/home/andreea/Pictures/Webcam/Faces/face.coord", [append]),
       io:format(Device1, "ERL:~p:~p ~p ~p ~p~n", [FID,element(1,BestFace),element(2,BestFace),element(1,BestFace)+element(3,BestFace),element(2,BestFace)+element(4,BestFace)]),
       file:close(Device1);
     true ->
-      %io:format("Best face: ~p~n", [[]])
+      io:format("No faces???!~n", []),
       ok
   end,
   {noreply, Q};
@@ -83,6 +83,16 @@ handle_cast(stop, Faces_Q) ->
 handle_call(get_face, _From, Faces_Q) -> 
   {noreply, Faces_Q}.
 
-handle_info(_Message, Faces_Q) -> {noreply, Faces_Q}.
+handle_info(_Message, Faces_Q) ->
+  case _Message of
+    stop ->
+       gen_server:cast(self(), stop);
+    kill ->
+       terminate(shutdown, Faces_Q);
+    _Other ->
+       io:format("What was that?~n",[])
+   end , 
+  {noreply, Faces_Q}.
+
 terminate(_Reason, _Faces_Q) -> ok.
 code_change(_OldVersion, Faces_Q, _Extra) -> {ok, Faces_Q}.

@@ -30,11 +30,11 @@ UVCDYNCTRLEXEC="/usr/bin/uvcdynctrl"
 
 def detect_face(frame, fid, worker):
 	#print "PY: Received frame."
-	# f = open("/home/andreea/Documents/ErlangProject/Supervised/Timing/roundtrip_timing_py.time", "a") 
-	# f.write("PYg:"+str(fid)+":"+str(int(time.time() * 1000000000))+"\n")
+	f = open("/home/andreea/Documents/ErlangProject/Supervised/Timing/roundtrip_timing_py.time", "a") 
+	f.write("PYg:"+str(fid)+":"+str(int(time.time() * 1000000000))+"\n")
 
-	suffix = randint(1,4)
-	faceCascade = cv.CascadeClassifier("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/HaarClassifiers/haarcascade_frontalface_"+str(suffix)+".xml")
+	#suffix = randint(1,4)
+	faceCascade = cv.CascadeClassifier("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/HaarClassifiers/haarcascade_frontalface_2.xml")
 
 	#flat_frame = zlib.decompress(frame)
 	#flat_frame = [int(i) for i in flat_frame.split(" ")]
@@ -50,8 +50,8 @@ def detect_face(frame, fid, worker):
 		bestFace = bestFace.tolist()
 
 
-	# f.write("PYf:"+str(fid)+":"+str(int(time.time() * 1000000000))+"\n")
-	# f.close()
+	f.write("PYf:"+str(fid)+":"+str(int(time.time() * 1000000000))+"\n")
+	f.close()
 	erlang.call(Atom("gen_server"), Atom("cast"), [(Atom("global"),Atom("aggregator_server")), (Atom("face"),fid, worker, bestFace)])
 
 
@@ -75,7 +75,7 @@ def read_webcam_feed(detectorsN, deviceID):
 		#i+=1
 		#print "PY: Sending frame..."
 		
-		receiver = randint(0,detectorsN)
+		receiver = randint(1,detectorsN)
 		f = open("/home/andreea/Documents/ErlangProject/Supervised/Timing/roundtrip_timing_py.time", "a") 
 		f.write("PYs:"+str(j)+":"+str(int(time.time() * 1000000000))+"\n")
 		j+=1

@@ -37,7 +37,7 @@ UVCDYNCTRLEXEC="/usr/bin/uvcdynctrl"
 # Set cascade classifier to use and camera ID (determined with "sudo uvcdynctrl -l")
 deviceID = 0
 
-historical_faces = deque(maxlen=3)
+historical_faces = deque(maxlen=5)
 a_j = 0
 
 a_f = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/Timing/aggregator_timing.time", "a+") 
@@ -75,9 +75,8 @@ def webcam_feed(publishers):
 	for i in xrange(len(publishers)):
 		#subscribers += [rospy.Subscriber('orbit_faces'+str(i), Int32Numpy, display_face, callback_args=[i, cap])]
 		subscribers += [rospy.Subscriber('orbit_faces'+str(i), Int32Numpy, display_face, callback_args=[i])]
-	j = 0
-	print natural_sort(glob.glob('/home/andreea/Pictures/Webcam/*.jpg'))
-	for filename in natural_sort(glob.glob('/home/andreea/Pictures/Webcam/*.jpg')):
+	j = 1
+	for filename in natural_sort(glob.glob('/home/andreea/Pictures/Webcam/Input/*.jpg')):
 		pics[j]=cv.imread(filename)
 		j+=1
 	
@@ -95,7 +94,7 @@ def webcam_feed(publishers):
 	###############
 			pub = publishers[randint(0,len(publishers)-1)]
 
-			f.write("s:"+str(j)+":"+str(int(time() * 1000))+"\n")
+			f.write("s:"+str(j)+":"+str(int(time() * 1000000))+"\n")
 			
 			msg.header.frame_id = str(key)
 			#j+=1
@@ -138,7 +137,7 @@ def display_face(faceCoord, args):
 
 	bestFace = map(lambda y: sum(y) / len(y), zip(*historical_faces))
 
-	#print bestFace
+	print faceID
 	#############
 	# cv.rectangle(frame, (270, 190), (370, 290), (0, 0, 255), 2)
 	# if bestFace:
@@ -153,11 +152,11 @@ def display_face(faceCoord, args):
 		cv.rectangle(image, (bestFace[0], bestFace[1]), (bestFace[0]+bestFace[2], bestFace[1]+bestFace[3]), (0, 255, 0), 2)
 
 	
-	ret = cv.imwrite("/home/andreea/Pictures/Webcam/DetectedPY/"+str(faceID)+".jpg",image)
-	res_file = open("/home/andreea/Pictures/Webcam/Faces/face.coord","a+")
-	res_file.write("ROS:"+str(start_coord[0])+" "+str(start_coord[1])+" "+str(end_coord[0])+" "+str(end_coord[1])+"\n")
+	
+	res_file = open("/home/andreea/Pictures/Webcam/Reliability/mainkill.coord","a+")
+	# res_file = open("/home/andreea/Pictures/Webcam/Faces/face.coord","a+")
+	res_file.write("ROS:"+str(faceID)+":"+str(start_coord[0])+" "+str(start_coord[1])+" "+str(end_coord[0])+" "+str(end_coord[1])+"\n")
 	res_file.close()
-	print ret
 
 	# bestFaceCentreX = bestFace[0]+bestFace[2]/2
 	# bestFaceCentreY = bestFace[1]+bestFace[2]/2
@@ -203,7 +202,7 @@ def main():
 	
 	publishers = []
 	for i in xrange(expected_workers):
-		publishers += [ rospy.Publisher('orbit_images'+str(i), Image, queue_size=10) ]
+		publishers += [ rospy.Publisher('orbit_images'+str(i), Image, queue_size=1000) ]
 	webcam_feed(publishers)
 
 if __name__ == '__main__':

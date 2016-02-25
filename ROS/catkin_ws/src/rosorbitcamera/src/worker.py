@@ -26,11 +26,10 @@ from rosorbitcamera.msg import Int32Numpy
 
 def detect_face(msg, args):
 
-	# f = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/Timing/roundtrip_timing.time", "a+")
-	# f.write("r:"+str(i)+":"+str(int(time.time() * 1000))+"\n\n")
-	# i+=1
-	# f.close()
 	frameID = int(msg.header.frame_id)
+	f = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/Timing/roundtrip_timing.time", "a+")
+	f.write("r:"+str(frameID)+":"+str(int(time.time() * 1000000))+"\n\n")
+
 	frame = bridge.imgmsg_to_cv2(msg)
 
 	#print "Received frame ", i
@@ -48,6 +47,9 @@ def detect_face(msg, args):
 	if faces != () and faces.size > 0:		# OpenCv strangely returns empty tuples occasionally, so check for that
 		bestFace = max(faces, key=lambda item:item[2])
 	
+	f = open("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/Timing/roundtrip_timing.time", "a+")
+	f.write("d:"+str(frameID)+":"+str(int(time.time() * 1000000))+"\n\n")
+	f.close()
 	pub=args[0]
 	rate=args[1]
 	pub.publish(bestFace.tolist()+[frameID] if bestFace != [] else [frameID])
@@ -66,11 +68,11 @@ def main():
 	# f.close()
 
 	# Set cascade classifier to use
-	faceCascade = cv.CascadeClassifier("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/HaarClassifiers/haarcascade_frontalface_"+suffix+".xml")
+	faceCascade = cv.CascadeClassifier("/home/andreea/Documents/catkin_ws/src/rosorbitcamera/src/HaarClassifiers/haarcascade_frontalface_1.xml")
 
 	rospy.init_node('orbit_face_tracking_n'+str(nodeID), anonymous=True)
 	pub = rospy.Publisher('orbit_faces'+str(nodeID), Int32Numpy, queue_size=10)
-	rospy.Subscriber('orbit_images'+str(nodeID), Image, detect_face, callback_args=[pub,rospy.Rate(3),faceCascade])
+	rospy.Subscriber('orbit_images'+str(nodeID), Image, detect_face, callback_args=[pub,rospy.Rate(100),faceCascade])
 	rospy.spin()
 
 if __name__ == '__main__':
