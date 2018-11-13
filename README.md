@@ -2,7 +2,8 @@
 Software Engineering BSc Final Project
 
 The research done as part of this project also contributed to the publishing of the following paper:
-[Andreea Lutac, Natalia Chechina, Gerardo Aragon-Camarasa, and Phil Trinder. 2016. Towards reliable and scalable robot communication. In Proceedings of the 15th International Workshop on Erlang (Erlang 2016). ACM, New York, NY, USA, 12-23. DOI: http://dx.doi.org/10.1145/2975969.2975971](https://dl.acm.org/citation.cfm?id=2975971)
+
+[Andreea Lutac, Natalia Chechina, Gerardo Aragon-Camarasa, and Phil Trinder. 2016. **Towards reliable and scalable robot communication.** In Proceedings of the 15th International Workshop on Erlang (Erlang 2016). ACM, New York, NY, USA, 12-23. DOI: http://dx.doi.org/10.1145/2975969.2975971](https://dl.acm.org/citation.cfm?id=2975971)
 
 This dissertation investigates the applicability of Erlang as an alternative robot control system software architecture
 that may improve upon the scalability and reliability limitations of more traditional approaches based
