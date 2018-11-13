@@ -1,5 +1,5 @@
 # Real-time Robot Camera Control in Erlang
-Software Engineering BSc Final Project
+University of Glasgow - Software Engineering BSc Final Project
 
 The research done as part of this project also contributed to the publishing of the following paper:
 
